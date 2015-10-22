@@ -1,78 +1,81 @@
-// Initialize Parse app
+window.addEventListener('load', function() {
+	console.log('event load?');
 
+	Parse.initialize("cD8q8sYVMPJrG0RH9fZw0roir7DN5M6VeEuvERTU", "PGGzTijtgpOB8N5u2441olHIXnmQd3JG81pzXT40");
+	var Music = Parse.Object.extend('Music');
 
-// Create a new sub-class of the Parse.Object, with name "Music"
-
-
-// Create a new instance of your Music class 
-
-
-// Set a property 'band' equal to a band name
-
-
-// Set a property 'website' equal to the band's website
-
-    
-// Set a property 'song' equal to a song
-
-
-// Save your instance of your song -- and go see it on parse.com!
-
-
-// Click event when form is submitted
-$('form').submit(function() {
-
-	// Create a new instance of your Music class 
-
-
-	// For each input element, set a property of your new instance equal to the input's value
-
-
-	// After setting each property, save your new instance back to your database
-
-	
-	return false
-})
+	document.getElementById('save').onclick = saveData;
+	document.getElementById('button').onclick = getData;
 
 
 
-// Write a function to get data
-var getData = function() {
-	
+	function saveData() {
+		var inputs = document.getElementsByTagName('input');
+		var music = new Music();
+		console.log(inputs);
+		music.set('band', inputs[0].value);
+		music.set('website', inputs[1].value);
+		music.set('song', inputs[2].value);
+		music.save();
+		for (input in inputs) {
+			inputs[input].value = '';
+		}	
+	}
 
-	// Set up a new query for our Music class
+	function getData() {
+		console.log('Getting Data');
+		document.getElementById('list').innerHTML = 'Getting Data...';
+		var query = new Parse.Query(Music);
+		query.notEqualTo('website', '');
+		query.find({
+			success: function(data) {
+				console.log(data);
+				buildList(data);
+			}
+		})
+	}
 
+	var buildList = function(data) {
+		document.getElementById('list').innerHTML = '';
+		for (dat in data) {
+			addItem(data[dat]);
+		}
+	}
 
-	// Set a parameter for your query -- where the website property isn't missing
+	var addItem = function(dat) {
+		console.log(dat);
+		var list = document.getElementById('list');
+		var item = document.createElement('li');
+		var remove = document.createElement('button');
+		var link = document.createElement('a');
+		link.href = 'https://www.youtube.com/results?search_query=';
+		link.innerHTML = dat.get('band') + ' ' + dat.get('song')
+		link.href+= link.innerHTML.replace(' ', '+');
+		link.href+= '&page=&utm_source=opensearch';
 
+		remove.classList.add('btn', 'btn-danger');
+		remove.innerHTML = 'remove';
+		remove.id = dat.id;
+		remove.onclick = deleteItem;
 
-	/* Execute the query using ".find".  When successful:
-	    - Pass the returned data into your buildList function
-	*/
-}
+		list.appendChild(link);
+		item.appendChild(remove);
+		list.appendChild(item);
+	}
 
-// A function to build your list
-var buildList = function(data) {
-	// Empty out your unordered list
-	
-	// Loop through your data, and pass each element to the addItem function
+	function deleteItem() {
+		console.log('herp da derp')
+		var query = new Parse.Query(Music);
+		query.get(this.id, {
+			success: function(d) {
+				d.destroy({
+					success: getData
+				});
+			},
+			error: function(d) {
+				alert('Error, could not delete. ' + d);
+			}
+		});
+	}
 
-}
-
-
-// This function takes in an item, adds it to the screen
-var addItem = function(item) {
-	// Get parameters (website, band, song) from the data item passed to the function
-
-	
-	// Append li that includes text from the data item
-
-
-	
-	// Time pending, create a button that removes the data item on click
-	
-}
-
-// Call your getData function when the page loads
-
-
+});

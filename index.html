@@ -5,16 +5,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Parse intro</title>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-		
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link href='css/main.css' rel='stylesheet' />
+        <script src="//www.parsecdn.com/js/parse-1.6.0.min.js"></script>
+
         <!-- Include parse library here -->
-        
     </head>
     <body>
     	<div class="container">
     		
-            <!-- Here is where you should build your form.  
-                You can make it look nicer with bootstrap classes like "form-input" -->
+            <form class='form'>
+
+                <label>Brand Name <input class='form-control' type='text' /></label>
+                <label>Website <input class='form-control' type='text' /></label>
+                <label>Best Song <input class='form-control' type='text' /></label>
+                <button id='save' class='btn btn-success' type="button">Save Band</button></form>
+                <button type='button' class='btn btn-info' id='button'>Get Data</button>
+
+            </form>
+
 
     	</div>
         <div class="container">
